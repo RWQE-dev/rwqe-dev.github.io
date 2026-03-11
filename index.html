@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Real World Quality Exec — Coming Soon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --navy:   #2C3E50;
+      --gold:   #D4AF37;
+      --caramel:#C9A96E;
+      --mid:    #5A5A5A;
+      --slate:  #707B7C;
+      --soft:   #f7f6f4;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      background-color: var(--soft);
+      font-family: 'Inter', sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
+      color: var(--mid);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background-color: var(--navy);
+      border-bottom: 1px solid rgba(212,175,55,0.20);
+      padding: 22px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #ffffff;
+      white-space: nowrap;
+    }
+
+    .logo .gold {
+      color: var(--gold);
+    }
+
+    /* ── MAIN ── */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 24px;
+    }
+
+    .content {
+      max-width: 720px;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* Eyebrow */
+    .eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--caramel);
+      margin-bottom: 28px;
+
+      opacity: 0;
+      transform: translateY(18px);
+      animation: fadeUp 0.7s ease forwards;
+      animation-delay: 0.1s;
+    }
+
+    /* Site name */
+    .site-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 58px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--navy);
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+      margin-bottom: 32px;
+
+      opacity: 0;
+      transform: translateY(18px);
+      animation: fadeUp 0.7s ease forwards;
+      animation-delay: 0.25s;
+    }
+
+    .site-name .gold {
+      color: var(--gold);
+    }
+
+    /* Divider */
+    .divider {
+      width: 48px;
+      height: 2px;
+      background-color: var(--gold);
+      margin: 0 auto 32px;
+
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeUp 0.6s ease forwards;
+      animation-delay: 0.4s;
+    }
+
+    /* Teaser */
+    .teaser {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--mid);
+      line-height: 1.8;
+      max-width: 560px;
+      margin: 0 auto 56px;
+
+      opacity: 0;
+      transform: translateY(18px);
+      animation: fadeUp 0.7s ease forwards;
+      animation-delay: 0.55s;
+    }
+
+    /* ── COUNTDOWN ── */
+    .countdown-wrap {
+      opacity: 0;
+      transform: translateY(18px);
+      animation: fadeUp 0.7s ease forwards;
+      animation-delay: 0.75s;
+    }
+
+    .countdown {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 0;
+    }
+
+    .unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 120px;
+    }
+
+    .unit-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 72px;
+      font-weight: 400;
+      color: var(--navy);
+      line-height: 1;
+      padding-bottom: 10px;
+      border-bottom: 2px solid rgba(212,175,55,0.35);
+      min-width: 100px;
+      text-align: center;
+      display: block;
+    }
+
+    .unit-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--slate);
+      margin-top: 10px;
+    }
+
+    .sep {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 60px;
+      font-weight: 300;
+      color: rgba(212,175,55,0.45);
+      line-height: 1;
+      padding: 0 4px;
+      align-self: flex-start;
+      margin-top: 4px;
+      user-select: none;
+    }
+
+    /* Live message */
+    .live-msg {
+      display: none;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 36px;
+      font-weight: 400;
+      color: var(--gold);
+      letter-spacing: 0.02em;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background-color: var(--navy);
+      border-top: 1px solid rgba(212,175,55,0.20);
+      padding: 22px 40px;
+      text-align: center;
+    }
+
+    footer p {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      color: rgba(255,255,255,0.40);
+      letter-spacing: 0.02em;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ── RESPONSIVE: 768px ── */
+    @media (max-width: 768px) {
+      main {
+        padding: 60px 20px;
+      }
+
+      .site-name {
+        font-size: 44px;
+      }
+
+      .unit {
+        min-width: 80px;
+      }
+
+      .unit-number {
+        font-size: 56px;
+        min-width: 72px;
+      }
+
+      .sep {
+        display: none;
+      }
+
+      .countdown {
+        gap: 16px;
+      }
+    }
+
+    /* ── RESPONSIVE: 480px ── */
+    @media (max-width: 480px) {
+      header {
+        padding: 18px 20px;
+      }
+
+      .logo {
+        font-size: 15px;
+        letter-spacing: 0.04em;
+      }
+
+      .site-name {
+        font-size: 34px;
+      }
+
+      .unit {
+        min-width: 64px;
+      }
+
+      .unit-number {
+        font-size: 40px;
+        min-width: 56px;
+        padding-bottom: 7px;
+      }
+
+      .unit-label {
+        font-size: 9px;
+        letter-spacing: 0.12em;
+      }
+
+      .countdown {
+        gap: 10px;
+      }
+
+      footer {
+        padding: 18px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+     
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main>
+    <div class="content">
+
+      <p class="eyebrow">— Coming Soon —</p>
+
+      <h1 class="site-name">
+        Real World<br><span class="gold">Quality</span> Exec
+      </h1>
+
+      <div class="divider"></div>
+
+      <p class="teaser">
+        Evidence-based insights into quality, operational excellence, regulatory sciences, and business performance in the pharmaceutical industry.
+      </p>
+
+      <div class="countdown-wrap">
+        <div class="countdown" id="countdown">
+          <div class="unit">
+            <span class="unit-number" id="days">00</span>
+            <span class="unit-label">Days</span>
+          </div>
+          <span class="sep" aria-hidden="true">:</span>
+          <div class="unit">
+            <span class="unit-number" id="hours">00</span>
+            <span class="unit-label">Hours</span>
+          </div>
+          <span class="sep" aria-hidden="true">:</span>
+          <div class="unit">
+            <span class="unit-number" id="minutes">00</span>
+            <span class="unit-label">Minutes</span>
+          </div>
+          <span class="sep" aria-hidden="true">:</span>
+          <div class="unit">
+            <span class="unit-number" id="seconds">00</span>
+            <span class="unit-label">Seconds</span>
+          </div>
+        </div>
+
+        <p class="live-msg" id="liveMsg">We are live. Welcome.</p>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>www.realworld-quality.com &nbsp;·&nbsp; © 2026 Real World Quality Exec. All rights reserved.</p>
+  </footer>
+
+  <script>
+    (function () {
+      // Target: 20 March 2026 at 23:59 CET (UTC+1)
+      var target = new Date('2026-03-20T23:59:00+01:00').getTime();
+
+      var daysEl    = document.getElementById('days');
+      var hoursEl   = document.getElementById('hours');
+      var minutesEl = document.getElementById('minutes');
+      var secondsEl = document.getElementById('seconds');
+      var countdown = document.getElementById('countdown');
+      var liveMsg   = document.getElementById('liveMsg');
+
+      function pad(n) {
+        return n < 10 ? '0' + n : '' + n;
+      }
+
+      function tick() {
+        var now  = Date.now();
+        var diff = target - now;
+
+        if (diff <= 0) {
+          countdown.style.display = 'none';
+          liveMsg.style.display   = 'block';
+          return;
+        }
+
+        var totalSec = Math.floor(diff / 1000);
+        var s = totalSec % 60;
+        var m = Math.floor(totalSec / 60) % 60;
+        var h = Math.floor(totalSec / 3600) % 24;
+        var d = Math.floor(totalSec / 86400);
+
+        daysEl.textContent    = pad(d);
+        hoursEl.textContent   = pad(h);
+        minutesEl.textContent = pad(m);
+        secondsEl.textContent = pad(s);
+      }
+
+      tick();
+      setInterval(tick, 1000);
+    })();
+  </script>
+
+</body>
+</html>
