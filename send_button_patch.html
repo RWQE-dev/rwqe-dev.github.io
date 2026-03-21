@@ -1,0 +1,48 @@
+<div class="wp-block-kadence-column kadence-column1241_d93bea-4f">
+  <div class="kt-inside-inner-col">
+    <div class="wp-block-kadence-advanced-form wp-block-kadence-advanced-form786-cpt-id kb-adv-form-label-style-normal kb-adv-form-input-size-standard kb-form-basic-style kb-form-is-dark wp-block-kadence-advanced-form">
+      <form id="kb-adv-form-786-cpt-id" class="kb-advanced-form">
+        <div class="kb-adv-form-field kb-adv-form-text-type-input kb-adv-form-infield-type-input kb-field786c6eba2-b4 wp-block-kadence-advanced-form-text"><label class="kb-adv-form-label" for="field786c6eba2-b4">Name<span class="kb-adv-form-required">*</span></label><input name="name" id="field786c6eba2-b4" data-label="Name" type="text" placeholder="" value="" data-type="text" class="kb-field kb-text-field" data-required="yes" required aria-required="true"></div>
+        <div class="kb-adv-form-field kb-adv-form-text-type-input kb-adv-form-infield-type-input kb-field786326237-36 wp-block-kadence-advanced-form-email"><label class="kb-adv-form-label" for="field786326237-36">Email <span class="kb-adv-form-required">*</span></label><input name="email" id="field786326237-36" data-label="Email " type="email" placeholder="" value="" data-type="email" class="kb-field kb-email-field" data-required="yes" required aria-required="true"></div>
+        <div class="kb-adv-form-field kb-adv-form-text-type-input kb-adv-form-infield-type-input kb-field7869aefb8-fa wp-block-kadence-advanced-form-textarea"><label class="kb-adv-form-label" for="field7869aefb8-fa">Message</label><textarea name="message" id="field7869aefb8-fa" rows="3" data-label="Message" placeholder="" data-type="textarea" class="kb-field kb-textarea-field" data-required="no"></textarea></div>
+        <div class="kb-adv-form-field kb-field786d811f4-1c wp-block-kadence-advanced-form-accept"><fieldset class="kb-radio-check-item-wrap" id="cb786d811f4-1c" data-type="accept" data-required="yes"><div class="kb-radio-check-item"><input name="privacy_policy" id="field786d811f4-1c_0" data-label="" type="checkbox" value="accept" data-type="accept" class="kb-field kb-accept-field kb-checkbox-field" data-required="yes" required aria-required="true"><label for="field786d811f4-1c_0">I have read and agree to the <a href="/privacy-policy/" data-type="page" data-id="3">privacy policy</a><span class="kb-adv-form-required">*</span></label></div></fieldset></div>
+        <div class="kb-adv-form-field kb-submit-field kb-field1_default wp-block-kadence-advanced-form-submit"><button class="kb-button kt-button button kb-adv-form-submit-button kb-btn1_default kt-btn-size-standard kt-btn-width-type-auto kb-btn-global-fill kt-btn-has-text-true kt-btn-has-svg-false" type="submit"><span class="kt-btn-inner-text">send</span></button></div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('kb-adv-form-786-cpt-id');
+  const submitBtn = form.querySelector('button[type="submit"]');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    formData.append("access_key", "57004cbc-95ed-401b-9b59-52b387e135b8");
+
+    const submitSpan = submitBtn.querySelector('.kt-btn-inner-text');
+    const originalText = submitSpan.textContent;
+    submitSpan.textContent = "Sending...";
+    submitBtn.disabled = true;
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData
+      });
+      const data = await response.json();
+      if (response.ok) {
+        alert("Success! Your message has been sent.");
+        form.reset();
+      } else {
+        alert("Error: " + data.message);
+      }
+    } catch (error) {
+      alert("Something went wrong. Please try again.");
+    } finally {
+      submitSpan.textContent = originalText;
+      submitBtn.disabled = false;
+    }
+  });
+</script>
