@@ -22,6 +22,7 @@ class ShortPixelScreen extends ShortPixelScreenBase
 			this.LoadPanels();
 			this.LoadActions();
       this.LoadDatePicker(); 
+      this.LoadAiOptionsToggle();
 
 			window.addEventListener('shortpixel.processor.paused', this.TogglePauseNotice.bind(this));
 			window.addEventListener('shortpixel.processor.responseHandled', this.CheckPanelData.bind(this));
@@ -97,6 +98,19 @@ class ShortPixelScreen extends ShortPixelScreenBase
 			}
 
 	}
+
+  // The AI sub-options (keep existing data, alt text in posts) only matter when AI runs during the bulk.
+  LoadAiOptionsToggle()
+  {
+    var checkbox = document.getElementById('autoai_checkbox');
+    var options = document.getElementById('ai_bulk_options');
+    if (null === checkbox || null === options)
+      return;
+
+    var toggle = function () { options.style.display = (checkbox.checked) ? '' : 'none'; };
+    checkbox.addEventListener('change', toggle);
+    toggle();
+  }
 
   LoadPanels()
   {
@@ -279,7 +293,7 @@ class ShortPixelScreen extends ShortPixelScreenBase
   }
   CreateBulk()
   {
-     console.log('Start Bulk');
+    if (window.ShortPixelProcessor && window.ShortPixelProcessor.ShouldLog()) console.log('Start Bulk');
      var data = {screen_action: 'createBulk', callback: 'shortpixel.PrepareBulk'}; //
 
      data.mediaActive = (document.getElementById('media_checkbox').checked) ? true : false;
@@ -291,6 +305,11 @@ class ShortPixelScreen extends ShortPixelScreenBase
      {
         data.aiActive = (document.getElementById('autoai_checkbox').checked) ? true : false;
         data.aiPreserve = (document.getElementById('aipreserve_checkbox').checked) ? true : false;
+        if (document.getElementById('ai_content_replace_select') !== null) {
+          data.ai_content_replace = document.getElementById('ai_content_replace_select').value;
+        } else {
+          data.ai_content_replace = null;
+        }
      }
      else
      {
@@ -353,7 +372,7 @@ class ShortPixelScreen extends ShortPixelScreenBase
   {
       if (qStatus == 'PREPARING_DONE' || qStatus == 'PREPARING_RECOUNT')
       {
-          console.log('Queue status: preparing done');
+          if (window.ShortPixelProcessor && window.ShortPixelProcessor.ShouldLog()) console.log('Queue status: preparing done');
 
           this.SwitchPanel('summary');
  					this.UpdatePanelStatus('loaded', 'selection'); // back to default
@@ -618,7 +637,7 @@ class ShortPixelScreen extends ShortPixelScreenBase
   // dataName refers to domain of data i.e. stats, result. Those are mentioned in UI with data-stats-media="total" or data-result
   UpdateData(dataName, data, type)
   {
-      console.log('updating Data :',  dataName + ' ' + type, data);
+      if (window.ShortPixelProcessor && window.ShortPixelProcessor.ShouldLog()) console.log('updating Data :',  dataName + ' ' + type, data);
 
       if (typeof type == 'undefined')
       {
@@ -820,7 +839,7 @@ class ShortPixelScreen extends ShortPixelScreenBase
 
   StartBulk() // Open panel action
   {
-      console.log('Starting to Bulk!');
+      if (window.ShortPixelProcessor && window.ShortPixelProcessor.ShouldLog()) console.log('Starting to Bulk!');
       var data = {screen_action: 'startBulk', callback: 'shortpixel.bulk.started'}; //
 
       // Prepare should happen after selecting what the optimize.
@@ -942,12 +961,12 @@ class ShortPixelScreen extends ShortPixelScreenBase
      var oldStatus = event.detail.oldStatus;
      var panelName = event.detail.panelName;
 
-     console.log('Status Updated', event.detail);
+    if (window.ShortPixelProcessor && window.ShortPixelProcessor.ShouldLog()) console.log('Status Updated', event.detail);
   }
   EventPanelSwitched (event)
   {
       // @todo Might not be relevant in new paging order.
-     console.log('Panel Switched', event.detail);
+    if (window.ShortPixelProcessor && window.ShortPixelProcessor.ShouldLog()) console.log('Panel Switched', event.detail);
      var panelLoad = event.detail.panelLoad;
      var panelUnload = event.detail.panelUnload;
 
@@ -977,7 +996,7 @@ class ShortPixelScreen extends ShortPixelScreenBase
           // basic check if value > 0
           if (checker == null)
           {
-            console.log('Control named ' + control + ' on ' + element.innerHTML + ' didn\'t find reference value element ');
+            if (window.ShortPixelProcessor && window.ShortPixelProcessor.ShouldLog()) console.log('Control named ' + control + ' on ' + element.innerHTML + ' didn\'t find reference value element ');
             return;
           }
 
@@ -1064,7 +1083,7 @@ class ShortPixelScreen extends ShortPixelScreenBase
 
   BulkRestoreAll(event)
   {
-    console.log('Start Restore All');
+    if (window.ShortPixelProcessor && window.ShortPixelProcessor.ShouldLog()) console.log('Start Restore All');
 	//	var media = document.getElementById('restore_media_checkbox');
 		var media = document.getElementById('restore_media_checkbox');
 		var custom = document.getElementById('restore_custom_checkbox');
@@ -1123,7 +1142,6 @@ class ShortPixelScreen extends ShortPixelScreenBase
 		this.UpdatePanelStatus('loading', 'selection');
 		this.SwitchPanel('selection');
 
-  	//this.SwitchPanel('process');
     this.RemovePanelFromURL(shortPixelScreen.panel);
 
 
@@ -1132,6 +1150,23 @@ class ShortPixelScreen extends ShortPixelScreenBase
     window.addEventListener('shortpixel.bulk.onSwitchPanel', this.StartBulk.bind(this), {'once': true});
     this.processor.AjaxRequest(data);
   }
+
+  BulkRedoAiReplacement (event)
+  {
+    var data = {screen_action: 'startBulkRedoAiReplacement', callback: 'shortpixel.startBulkRedoAiReplacement'}; //
+		this.UpdatePanelStatus('loading', 'selection');
+		this.SwitchPanel('selection');
+
+    this.RemovePanelFromURL(shortPixelScreen.panel);
+
+
+    // Prepare should happen after selecting what the optimize.
+    window.addEventListener('shortpixel.startBulkRedoAiReplacement', this.PrepareBulk.bind(this), {'once': true} );
+    window.addEventListener('shortpixel.bulk.onSwitchPanel', this.StartBulk.bind(this), {'once': true});
+    this.processor.AjaxRequest(data);
+  }
+
+
 	BulkRemoveLegacy(event)
   {
 
